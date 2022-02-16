@@ -1,0 +1,21 @@
+GEM
+  remote: https://rubygems.org/
+  specs:
+    little-plugger (1.1.4)
+    logging (2.3.0)
+      little-plugger (~> 1.1)
+      multi_json (~> 1.14)
+    matrix_sdk (2.5.0)
+      logging (~> 2)
+    multi_json (1.15.0)
+    tomlrb (2.0.1)
+
+PLATFORMS
+  x86_64-darwin-20
+
+DEPENDENCIES
+  matrix_sdk
+  tomlrb
+
+BUNDLED WITH
+   2.2.32

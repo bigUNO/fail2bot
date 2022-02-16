@@ -1,0 +1,7 @@
+# fail2bot configuration
+title = "example"
+
+[matrix]
+server = "https://example.matrix.xyz"
+access_token =  ""
+room = "!xxxxxxxxxxxxxxxx:matrix.xyz" # Starts with an '!'
