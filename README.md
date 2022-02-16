@@ -14,7 +14,7 @@ cp example_fail2bot.toml fail2bot.toml
 ./fail2ban --name <name> --ban-time <bantime>  --ip <ip>
 ```
 
-## Ser
+## Server Install
 ```shell
 # Copy provided config to action directory
 cp fail2bot.conf /etc/fail2bot/action.d/fail2bot.conf
