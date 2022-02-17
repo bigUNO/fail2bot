@@ -46,15 +46,29 @@ def validate_cl_input(options)
   end
 end
 
+# Shamelessly stolen from SO
+# https://stackoverflow.com/questions/4136248/how-to-generate-a-human-readable-time-range-using-ruby-on-rails
+def humanize(raw_seconds)
+  [[60, :seconds], [60, :minutes], [24, :hours], [Float::INFINITY, :days]].map{ |count, name|
+    next unless raw_seconds.positive?
+
+    raw_seconds, n = raw_seconds.divmod(count)
+
+    "#{n.to_i} #{name}" unless n.to_i.zero?
+  }.compact.reverse.join(' ')
+end
+
 def send_message_to_matrix(options, config)
   client = MatrixSdk::Client.new config.dig(:matrix, :server)
   client.api.access_token = config.dig(:matrix, :access_token)
   puts 'Syncing with matrix server' if options[:verbose]
   client.sync
 
+  human_readable_jail_sentence = humanize(options[:ban_time].to_i)
+
   hq = client.find_room config.dig(:matrix, :room)
   hq.send_text "\u{2696} #{options[:ip]} has been found guilty of crimes against #{options[:name]}." \
-               "\u{1f46e} Serving #{options[:ban_time]} in jail."
+               "\u{1f46e} Serving #{human_readable_jail_sentence} in jail."
 end
 
 validate_cl_input(options)
