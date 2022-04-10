@@ -2,3 +2,4 @@
 *.iml
 bin/
 fail2bot.toml
+client_test.rb

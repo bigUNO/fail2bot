@@ -58,17 +58,27 @@ def humanize(raw_seconds)
   }.compact.reverse.join(' ')
 end
 
+# Return country for a given IP
+def get_country(options)
+  response = Net::HTTP.get( URI.parse("https://www.iplocate.io/api/lookup/#{options[:ip]}"))
+  puts response if options[:verbose]
+  JSON.parse(response)['country']
+end
+
 def send_message_to_matrix(options, config)
   client = MatrixSdk::Client.new config.dig(:matrix, :server)
   client.api.access_token = config.dig(:matrix, :access_token)
-  puts 'Syncing with matrix server' if options[:verbose]
+  puts 'Login Successful...' if client.logged_in? && options[:verbose]
   client.sync
 
   human_readable_jail_sentence = humanize(options[:ban_time].to_i)
+  country = get_country(options)
 
-  hq = client.find_room config.dig(:matrix, :room)
-  hq.send_text "\u{2696} #{options[:ip]} has been found guilty of crimes against #{options[:name]}." \
-               "\u{1f46e} Serving #{human_readable_jail_sentence} in jail."
+  rm = client.find_room config.dig(:matrix, :room)
+
+  puts 'Sending message to matrix' if options[:verbose]
+  rm.send_text "\u{2696} #{options[:ip]} (#{country}) has been found guilty of crimes against #{options[:name]}."
+  rm.send_text "\u{1f46e} Serving #{human_readable_jail_sentence} in jail."
 end
 
 validate_cl_input(options)
